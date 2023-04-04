@@ -101,7 +101,7 @@ function transformTarget(target, dx, dy, scale) {
     let y = (parseFloat(target.dataset.y) || 0) + dy
     target.dataset.x = x
     target.dataset.y = y
-    target.dataset.scaled = true;
+    target.dataset.scaled = "true";
     target.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')'
 }
 
@@ -179,7 +179,7 @@ onMounted(() => {
             // reset and hide item
             event.target.dataset.x = 0;
             event.target.dataset.y = 0;
-            event.target.dataset.scaled = false;
+            event.target.dataset.scaled  = "";
             event.target.style.transform = "";
             event.target.style.visibility = "hidden";
             gameItemCount--;
