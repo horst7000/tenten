@@ -1,34 +1,38 @@
 <template>
-  <div ref="board" :style="{ height: lineLength*itemSize*spaceFactor + 'px'}">
-    <div
-      :style="{
-        position: 'absolute',
-        left: (i-1)%lineLength * spaceFactor * itemSize +'px',
-        top: Math.floor((i-1)/lineLength) * spaceFactor * itemSize +'px',
-        background: colors[i-1] || '#222',
-        width:  itemSize+'px',
-        height: itemSize+'px',
-        borderRadius: itemSize*0.1+'px',
-      }"
-      v-for="i in totalItems">
+  <h1>Production</h1>
+  <div :id="prodId">
+    <div ref="boardEl" :style="{ height: lineLength*itemSize*spaceFactor + 'px'}">
+      <div
+        :style="{
+          position: 'absolute',
+          left: (i-1)%lineLength * spaceFactor * itemSize +'px',
+          top: Math.floor((i-1)/lineLength) * spaceFactor * itemSize +'px',
+          background: colors[i-1] || 'var(--color-background-soft)',
+          width:  itemSize+'px',
+          height: itemSize+'px',
+          borderRadius: itemSize*0.1+'px',
+        }"
+        v-for="i in totalItems">
+      </div>
     </div>
-  </div>
 
-  <div :style="{ marginTop: 20 + 'px'}">
-    <GameItem v-for="i in currentItems"
-      :lines="i.lines"
-      :color="i.color"
-      :itemSize="itemSize*itemStartFactor"
-      :spaceFactor="spaceFactor"/>
+    <div :style="{ marginTop: 20 + 'px'}">
+      <ProdFacility v-for="i in currentItems"
+        :lines="i.lines"
+        :color="i.color"
+        :itemSize="itemSize*itemStartFactor"
+        :spaceFactor="spaceFactor"/>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import GameItem from './GameItem.vue';
+import ProdFacility from './ProdFacility.vue';
 import interact from 'interactjs'
 /* ---------------- props ------------------- */
 /* ---------------- data -------------------- */
+const prodId = "pr-" + Math.random().toString(36).slice(5);
 const lineLength = 10;
 const totalItems = lineLength*lineLength;
 const spaceFactor = 1.5;
@@ -66,17 +70,19 @@ const itemTypes = [
 ]
 /* ---------------- refs -------------------- */
 const currentItems = ref([])
-const board        = ref(null)
+const boardEl      = ref(null)
 const colors       = ref(Array(totalItems).fill(''));
 
 /* ---------------- computed ---------------- */
+let scrollY = 0;
 const boardBoundingRects = computed(() => {
   console.log("computed boardRects");
-  return Array.from(board.value.children).map(el => el.getBoundingClientRect());
+  scrollY = window.scrollY;
+  return Array.from(boardEl.value.children).map(el => el.getBoundingClientRect());
 });
 
 /* ---------------- functions --------------- */
-let gameItemCount = 0;
+let prodFacilityCount = 0;
 function selectNewItems() {
   currentItems.value = [];
   for (let i = 0; i < 3; i++) {
@@ -85,13 +91,13 @@ function selectNewItems() {
     const variantIndex  = Math.floor(itemType.variants.length * Math.random());
     const variant       = itemType.variants[variantIndex];
     currentItems.value.push({ color: itemType.color, lines: variant});
-    gameItemCount++;
+    prodFacilityCount++;
   }
   showItems();
 }
 
 function showItems() {
-  document.querySelectorAll(".item").forEach((el) => {
+  document.querySelectorAll(`#${prodId} .item`).forEach((el) => {
     el.style.visibility = "";
   })  
 }
@@ -105,13 +111,13 @@ function transformTarget(target, dx, dy, scale) {
     target.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')'
 }
 
-function colorizeBoard(gameItemEl) {
+function colorizeBoard(prodFacilityEl) {
   let indices = [];
-  for (let i = 0; i < gameItemEl.children.length; i++) {
+  for (let i = 0; i < prodFacilityEl.children.length; i++) {
     // inner item rects
-    const itemRect = gameItemEl.children[i].getBoundingClientRect();
-    const centerX = itemRect.x + itemRect.width  / 2;
-    const centerY = itemRect.y + itemRect.height / 2;
+    const itemRect = prodFacilityEl.children[i].getBoundingClientRect();
+    const centerX = itemRect.left + itemRect.width  / 2;
+    const centerY = itemRect.top  + itemRect.height / 2 + window.scrollY - scrollY;
     for (let j = 0; j < boardBoundingRects.value.length; j++) {
       // inner board rects
       const boardRect = boardBoundingRects.value[j];
@@ -124,8 +130,8 @@ function colorizeBoard(gameItemEl) {
     }
   }
   // legal?
-  const legal = indices.length == gameItemEl.children.length;
-  legal && indices.forEach(i => colors.value[i] = gameItemEl.firstElementChild.style.background)
+  const legal = indices.length == prodFacilityEl.children.length;
+  legal && indices.forEach(i => colors.value[i] = prodFacilityEl.firstElementChild.style.background)
   
   return legal;
 }
@@ -159,8 +165,7 @@ function clearColumn(i) {
 /* ------------- lifecycle hooks ------------ */
 onMounted(() => {
   selectNewItems();
-
-  interact('.item')
+  interact(`#${prodId} .item`)
     .draggable({
       listeners: {
         start (event) {
@@ -182,8 +187,8 @@ onMounted(() => {
             event.target.dataset.scaled  = "";
             event.target.style.transform = "";
             event.target.style.visibility = "hidden";
-            gameItemCount--;
-            if(gameItemCount == 0) {
+            prodFacilityCount--;
+            if(prodFacilityCount == 0) {
               selectNewItems();
             }
           };
