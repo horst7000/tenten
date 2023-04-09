@@ -1,5 +1,6 @@
 <template>
   <h1>Trading</h1>
+  <p v-for="i in 23" >Ressource {{ i }}</p>
 </template>
 
 <script setup>

@@ -1,6 +1,6 @@
 <template>
   <h1>Production</h1>
-  <div :id="prodId">
+  <div :id="prodId" v-if="selected">
     <div ref="boardEl" :style="{ height: lineLength*itemSize*spaceFactor + 'px'}">
       <div
         :style="{
@@ -24,12 +24,14 @@
         :spaceFactor="spaceFactor"/>
     </div>
   </div>
+  <div v-else class="placeholder"></div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import ProdFacility from './ProdFacility.vue';
 import interact from 'interactjs'
+
 /* ---------------- props ------------------- */
 /* ---------------- data -------------------- */
 const prodId = "pr-" + Math.random().toString(36).slice(5);
@@ -68,10 +70,12 @@ const itemTypes = [
     [1, 1]],
   },
 ]
+
 /* ---------------- refs -------------------- */
 const currentItems = ref([])
 const boardEl      = ref(null)
 const colors       = ref(Array(totalItems).fill(''));
+const selected     = ref(false);
 
 /* ---------------- computed ---------------- */
 let scrollY = 0;
@@ -200,4 +204,9 @@ onMounted(() => {
 </script>
 
 <style>
+.placeholder {
+  height: 300px;
+  background: var(--color-background-soft);
+  border-radius: 20px;
+}
 </style>
