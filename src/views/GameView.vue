@@ -15,7 +15,7 @@
       </div>
       <div class="tabs">
         <div class="row" :style="{ width: (3*100)+'%', touchAction: 'pan-y'}">
-          <City :style="{transform: 'translateX('+translateXCities[i]+'%)', transition: animCities[i]}" v-for="i in [0,1,2]"/>
+          <City :style="{transform: 'translateX('+tabTranslatesX[i]+'%)', transition: tabTransitions[i]}" v-for="i in [0,1,2]"/>
         </div>
       </div>
       <Transporter></Transporter>
@@ -36,18 +36,18 @@
   const defaultTransition = 'all 0.3s'; // in %
 
   /* ---------------- refs -------------------- */
-  const checkedTab    = ref(1);
-  const animCities    = ref(Array(3).fill(defaultTransition));
-  const loadedCities     = ref([tabsCnt, 1, 2]);
-  const cityIndex        = ref({left: 0, mid: 1, right: 2});
-  const translateXCities = ref([-100, -100, -100]);
+  const loadedCities    = ref([tabsCnt, 1, 2]);
+  const checkedTab      = ref(1);
+  const tabTransitions  = ref(Array(3).fill(defaultTransition));
+  const tabIndex        = ref({left: 0, mid: 1, right: 2});
+  const tabTranslatesX  = ref([-100, -100, -100]);
 
   /* ---------------- computed ---------------- */
   /* ---------------- functions --------------- */
   function moveTabsBy(dx) {
-    translateXCities.value[0] += dx;
-    translateXCities.value[1] += dx;
-    translateXCities.value[2] += dx;
+    tabTranslatesX.value[0] += dx;
+    tabTranslatesX.value[1] += dx;
+    tabTranslatesX.value[2] += dx;
   }
 
   /* ---------------- watchers ---------------- */
@@ -56,29 +56,29 @@
       moveTabsBy(-totDx + 100);
       totDx = 0;
 
-      const rightIndex = cityIndex.value.right;
-      animCities.value[cityIndex.value.right] = ''
-      translateXCities.value[cityIndex.value.right] -= 300;
+      const rightIndex = tabIndex.value.right;
+      tabTransitions.value[tabIndex.value.right] = ''
+      tabTranslatesX.value[tabIndex.value.right] -= 300;
       setTimeout(() => {
-        animCities.value[rightIndex] = defaultTransition;
-      }, 1);
-      cityIndex.value.right = (cityIndex.value.right+2) % 3; //+2 <-> -1
-      cityIndex.value.mid   = (cityIndex.value.mid+2) % 3;
-      cityIndex.value.left  = (cityIndex.value.left+2) % 3;
+        tabTransitions.value[rightIndex] = defaultTransition;
+      }, 50);
+      tabIndex.value.right = (tabIndex.value.right+2) % 3; //+2 <-> -1
+      tabIndex.value.mid   = (tabIndex.value.mid+2) % 3;
+      tabIndex.value.left  = (tabIndex.value.left+2) % 3;
     }
     else if(oldTab < newTab) { // tab on right
       moveTabsBy(-totDx - 100);
       totDx = 0;
 
-      const leftIndex = cityIndex.value.left;
-      animCities.value[cityIndex.value.left] = ''
-      translateXCities.value[cityIndex.value.left] += 300;
+      const leftIndex = tabIndex.value.left;
+      tabTransitions.value[tabIndex.value.left] = ''
+      tabTranslatesX.value[tabIndex.value.left] += 300;
       setTimeout(() => {
-        animCities.value[leftIndex] = defaultTransition;
-      }, 1);
-      cityIndex.value.right = (cityIndex.value.right+1) % 3; 
-      cityIndex.value.mid   = (cityIndex.value.mid+1) % 3;
-      cityIndex.value.left  = (cityIndex.value.left+1) % 3;
+        tabTransitions.value[leftIndex] = defaultTransition;
+      }, 50);
+      tabIndex.value.right = (tabIndex.value.right+1) % 3; 
+      tabIndex.value.mid   = (tabIndex.value.mid+1) % 3;
+      tabIndex.value.left  = (tabIndex.value.left+1) % 3;
     }
   })
 
@@ -89,7 +89,7 @@
     const dragger = interact('.row').draggable({
       onstart: (ev) => {
         totDx = 0;
-        animCities.value = ['','',''];
+        tabTransitions.value = ['','',''];
       },
       onmove: (ev) => {
         let dx = 100 * ev.dx/330; // in %
@@ -97,7 +97,7 @@
         totDx += dx;
       },
       onend: (ev) => {
-        animCities.value = Array(3).fill(defaultTransition);
+        tabTransitions.value = Array(3).fill(defaultTransition);
         if(totDx > swipeThreshold) { // tab on left
           checkedTab.value = (checkedTab.value + tabsCnt - 2) % tabsCnt + 1;
         }
