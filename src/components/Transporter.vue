@@ -6,8 +6,7 @@
   <div style="
     position: sticky;
     bottom: 0;
-    margin-left:  -28px;
-    margin-right: -28px;
+    margin: 0 var(--main-margin);
     height: 100px;
     border-top: 3px solid var(--color-border);
     border-bottom: none;

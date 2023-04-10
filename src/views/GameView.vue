@@ -13,7 +13,7 @@
           <label class="pseudo button toggle" :for="'tab-test-'+i">{{ i }}</label>
         </template>
       </div>
-      <div class="tabs">
+      <div class="tabs" style="margin: 0 var(--main-margin);">
         <div class="row" :style="{ width: (3*100)+'%', touchAction: 'pan-y'}">
           <City :style="{transform: 'translateX('+tabTranslatesX[i]+'%)', transition: tabTransitions[i]}" v-for="i in [0,1,2]"/>
         </div>
@@ -41,6 +41,7 @@
   const tabTransitions  = ref(Array(3).fill(defaultTransition));
   const tabIndex        = ref({left: 0, mid: 1, right: 2});
   const tabTranslatesX  = ref([-100, -100, -100]);
+  const tabWidth        = ref(0);
 
   /* ---------------- computed ---------------- */
   /* ---------------- functions --------------- */
@@ -85,14 +86,16 @@
   /* ------------- lifecycle hooks ------------ */
   let totDx = 0;
   onMounted(() => {
-    window.addEventListener('resize', () => windowSize.value = { w: window.innerWidth, h: window.innerHeight });
+    tabWidth.value = document.querySelector('.tabs').offsetWidth
+    window.addEventListener('resize', () => tabWidth.value = document.querySelector('.tabs').offsetWidth);
+
     const dragger = interact('.row').draggable({
       onstart: (ev) => {
         totDx = 0;
         tabTransitions.value = ['','',''];
       },
       onmove: (ev) => {
-        let dx = 100 * ev.dx/330; // in %
+        let dx = 100 * ev.dx/tabWidth.value; // in %
         moveTabsBy(dx);
         totDx += dx;
       },
@@ -117,8 +120,12 @@
   
   <style>
   main {
-    width: 330px;
+    --main-padding: 1.3rem;
+    --main-margin: calc(-1*var(--main-padding));
+    width: 100%;
+    max-width: 500px;
     margin: 0 auto;
+    padding: 0 var(--main-padding);
   }
 
   :checked+.toggle, :checked+.toggle:hover {

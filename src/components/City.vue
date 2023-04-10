@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 0 var(--main-padding); border: 2px solid var(--color-background-soft); border-top: none; border-bottom: none;" >
     <Trading></Trading>
     <Production></Production>
   </div>

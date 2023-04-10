@@ -1,7 +1,7 @@
 <template>
   <h1>Production</h1>
   <div :id="prodId" v-if="selected">
-    <div ref="boardEl" :style="{ height: lineLength*itemSize*spaceFactor + 'px'}">
+    <div ref="boardEl" :style="{ height: lineLength*itemSize*spaceFactor + 'px', width: lineLength*itemSize*spaceFactor + 'px', margin: '0 auto'}">
       <div
         :style="{
           position: 'absolute',
@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div :style="{ marginTop: 20 + 'px'}">
+    <div :style="{ width: '300px', margin: '0 auto', marginTop: 20+'px'}">
       <ProdFacility v-for="i in currentItems"
         :lines="i.lines"
         :color="i.color"
