@@ -75,7 +75,7 @@ const itemTypes = [
 const currentItems = ref([])
 const boardEl      = ref(null)
 const colors       = ref(Array(totalItems).fill(''));
-const selected     = ref(false);
+const selected     = ref(true);
 
 /* ---------------- computed ---------------- */
 let scrollY = 0;
@@ -171,33 +171,31 @@ onMounted(() => {
   selectNewItems();
   interact(`#${prodId} .item`)
     .draggable({
-      listeners: {
-        start (event) {
-          const dy = event.target.dataset.scaled ? 0 : -100;
-          transformTarget(event.target, 0, dy, itemDraggedScale);
-        },
-        move (event) {
-          transformTarget(event.target, event.dx, event.dy, itemDraggedScale);
-        },
-        end (event) {
-          transformTarget(event.target, 0, 0, itemDraggedScale);
-
-          const done = colorizeBoard(event.target);
-          if(done) {
-            clearFullAxes();
-            // reset and hide item
-            event.target.dataset.x = 0;
-            event.target.dataset.y = 0;
-            event.target.dataset.scaled  = "";
-            event.target.style.transform = "";
-            event.target.style.visibility = "hidden";
-            prodFacilityCount--;
-            if(prodFacilityCount == 0) {
-              selectNewItems();
-            }
-          };
-        }
+      onstart: (ev) => {
+        const dy = ev.target.dataset.scaled ? 0 : -100;
+        transformTarget(ev.target, 0, dy, itemDraggedScale);
       },
+      onmove: (ev) => {
+        transformTarget(ev.target, ev.dx, ev.dy, itemDraggedScale);
+      },
+      onend: (ev) => {
+        transformTarget(ev.target, 0, 0, itemDraggedScale);
+
+        const done = colorizeBoard(ev.target);
+        if(done) {
+          clearFullAxes();
+          // reset and hide item
+          ev.target.dataset.x = 0;
+          ev.target.dataset.y = 0;
+          ev.target.dataset.scaled  = "";
+          ev.target.style.transform = "";
+          ev.target.style.visibility = "hidden";
+          prodFacilityCount--;
+          if(prodFacilityCount == 0) {
+            selectNewItems();
+          }
+        };
+      }
     })
 })
 
