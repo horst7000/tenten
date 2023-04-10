@@ -121,16 +121,15 @@
   <style>
   main {
     --main-padding: 1.3rem;
-    --main-margin: calc(-1*var(--main-padding));
+    --main-margin: calc(-1*var(--main-padding));    
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
     padding: 0 var(--main-padding);
   }
 
-  :checked+.toggle, :checked+.toggle:hover {
-    box-shadow: inset 0 0 0 99em var(--color-background-soft);
-  }
-
+  /* :checked+.toggle, :checked+.toggle:hover {
+    box-shadow: initial;
+  } */
   
   </style>

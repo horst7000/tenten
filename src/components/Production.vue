@@ -38,7 +38,7 @@ const prodId = "pr-" + Math.random().toString(36).slice(5);
 const lineLength = 10;
 const totalItems = lineLength*lineLength;
 const spaceFactor = 1.5;
-const itemSize    = 22;
+const itemSize    = 20;
 const itemStartFactor  = 0.6;
 const itemDraggedScale = 1/itemStartFactor;
 const itemTypes = [
@@ -202,9 +202,4 @@ onMounted(() => {
 </script>
 
 <style>
-.placeholder {
-  height: 300px;
-  background: var(--color-background-soft);
-  border-radius: 20px;
-}
 </style>
