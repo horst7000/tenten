@@ -116,6 +116,7 @@ function transformTarget(target, dx, dy, scale) {
 }
 
 function colorizeBoard(prodFacilityEl) {
+  boardBoundingRects.value; // precomputes values
   let indices = [];
   for (let i = 0; i < prodFacilityEl.children.length; i++) {
     // inner item rects
