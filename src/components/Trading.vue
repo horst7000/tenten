@@ -1,12 +1,12 @@
 <template>
   <h1>Trading</h1>
-  <div class="flex nine" v-for="i in 23" >
-    <span class="label warning" :style="{ backgroundColor: `hsl(${15*i}, 60%, 50%)`}"></span>
+  <div class="flex eight" v-for="i in 23" >
+    <span class="name half">Ressource {{ i }}
+      <span class="label" :style="{ backgroundColor: `hsl(${15*i}, 60%, 50%)`, margin: '0 1em 0 0.5em'}"></span></span>
     <span>{{ Math.random()<0.2 ? rand(30) : '' }}</span>
-    <span class="name two-fifth">Ressource {{ i }}</span>
-    <button :disabled="Math.random()<0.5" v-if="selected" style="padding: 0; line-height: 1;">{{ rand(30) }}</button>
+    <button :disabled="Math.random()<0.5" v-if="selected" class="left">{{ rand(30) }}</button>
+    <button :disabled="Math.random()<0.5" v-if="selected" class="right">{{ rand(3000) }}</button>
     <span>{{ rand(30) }}</span>
-    <button :disabled="Math.random()<0.5" v-if="selected" style="padding: 0; line-height: 1;">{{ rand(30) }}</button>
   </div>
 </template>
 
@@ -32,7 +32,15 @@ function rand(max) {
   padding-left: 0;
 }
 .name {
-  text-align: initial;
+  text-align: right;
+}
+.left {
+  border-top-left-radius: 0.6em;
+  border-bottom-left-radius: 0.6em;
+}
+.right {
+  border-top-right-radius: 0.6em;
+  border-bottom-right-radius: 0.6em;
 }
 span {
   text-align: center;
@@ -41,6 +49,8 @@ span {
 }
 button {
   background-color: var(--color-background-mute);
+  padding: 0;
+  line-height: 1;
 }
 button:disabled {
   background-color: var(--color-background-soft);
