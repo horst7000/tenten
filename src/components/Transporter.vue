@@ -21,9 +21,9 @@
       </div>
 
       <div class="flex">
-        <span class="res-avail">$Ø:</span>
+        <span class="res-avail" style="color: #777;">$Ø:</span>
         <span v-for="r in transporter.ressources" class="res-avail">
-          <span class="label" :style="{background: `hsl(${15*r.index}, 60%, 50%)`}"></span>{{ r.price }}
+          <span class="label" :style="{background: `hsl(${15*r.index}, 60%, 50%)`}"></span>{{ Math.round(r.price) }}
           <!-- TODO show price instead of stock -->
         </span>
       </div>

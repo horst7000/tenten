@@ -7,7 +7,6 @@ export const useTransporterStore = defineStore('transporter', () => {
   const cities = useCityStore();
 
   /* ---------------- refs -------------------- */
-  // const ressources = ref(Array(cities.ressourcesCnt).fill(0).map(() => Math.random()<0.2 ? rand(0) : 0))
   const ressources = ref({});
   const inCity     = ref('')
 
