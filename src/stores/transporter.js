@@ -7,7 +7,8 @@ export const useTransporterStore = defineStore('transporter', () => {
   const cities = useCityStore();
 
   /* ---------------- refs -------------------- */
-  const ressources = ref(Array(cities.ressourcesCnt).fill(0).map(() => Math.random()<0.2 ? rand(30) : 0))
+  // const ressources = ref(Array(cities.ressourcesCnt).fill(0).map(() => Math.random()<0.2 ? rand(0) : 0))
+  const ressources = ref({});
   const inCity     = ref('')
 
   /* ---------------- computed ---------------- */
@@ -17,6 +18,23 @@ export const useTransporterStore = defineStore('transporter', () => {
   function rand(max) {
     return Math.floor((max+1)*Math.random());
   }
+
+  function load(index, count, price) {
+    if(ressources.value[index]) {
+      const oldCnt = ressources.value[index].count;
+      const newCnt = oldCnt + count;
+      ressources.value[index].price = ( oldCnt * ressources.value[index].price + count * price ) / newCnt;
+      ressources.value[index].count += count;
+    }
+    else {
+      ressources.value[index] = { count, price, index }
+    }
+  }
+
+  function unload(index, count) {
+    ressources.value[index].count -= count;
+    if(ressources.value[index].count == 0) delete ressources.value[index];
+  }
   
-  return { ressources, inCity, isInCity }
+  return { ressources, inCity, isInCity, load, unload }
 })

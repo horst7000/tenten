@@ -6,13 +6,13 @@
     </span>
 
     <span :style="{ color: transporter.isInCity ? 'var(--color-text)' : '#777' }">
-      {{ transporter.ressources[i-1]||'' }}
+      {{ transporter.ressources[i-1] ? transporter.ressources[i-1].count : '' }}
     </span>
     <button :disabled="!isBuyable(i-1)" class="left" @click="() => buy(i-1)">
-      {{ prices[i-1] }}
+      {{ buyPrices[i-1] }}
     </button>
-    <button :disabled="!isSellable(i-1)" v-if="selected" class="right" @click="() => sell(i-1)">
-      {{ Math.floor(prices[i-1] * 0.8) }}
+    <button :disabled="!isSellable(i-1)" class="right" @click="() => sell(i-1)">
+      {{ sellPrices[i-1] }}
     </button>
     <span :style="{ color: `hsl(0, ${(economy[i-1]+1)/(ressources[i-1]+1) > 1.5 ? 100 : 0 }%, 70%)` }">
       {{ ressources[i-1] }}
@@ -24,6 +24,7 @@
 import { ref, computed } from 'vue';
 import { useCityStore } from '../stores/cities';
 import { useTransporterStore } from '../stores/transporter';
+import { usePlayerStore } from '../stores/player';
 
 /* ---------------- props ------------------- */
 const props = defineProps({cid: String,})
@@ -31,19 +32,17 @@ const props = defineProps({cid: String,})
 /* ---------------- data -------------------- */
 const cities      = useCityStore();
 const transporter = useTransporterStore();
+const player      = usePlayerStore();
 
 /* ---------------- refs -------------------- */
-const selected = ref(true);
-
 /* ---------------- computed ---------------- */
 const ressources = computed(() => cities.all[props.cid].ressources);
 const economy    = computed(() => cities.all[props.cid].economy);
-const prices     = computed(() => {  
-  return ressources.value.map( (r, i) => {
-    const basePrice = 50 + 20 * Math.pow(Math.floor(i/3),1.6);
-    const need = Math.min(Math.max( Math.pow((economy.value[i]+1)/(ressources.value[i]+1), 0.6), 0.5), 3);
-    return Math.round(basePrice * need);
-  })
+const buyPrices  = computed(() => {
+  return ressources.value.map( (r, i) => Math.round(price(i, 0)));
+});
+const sellPrices = computed(() => {  
+  return ressources.value.map( (r, i) => Math.round(price(i, 1) * 0.9));
 });
 
 /* ---------------- functions --------------- */
@@ -52,17 +51,25 @@ function isBuyable(i) {
 }
 
 function isSellable(i) {
-  return transporter.ressources[i] > 0 && transporter.isInCity;
+  return transporter.ressources[i] && transporter.ressources[i].count > 0 && transporter.isInCity;
 }
 
 function buy(i) {
+  player.money -= buyPrices.value[i];
+  transporter.load(i, 1, buyPrices.value[i]);
   ressources.value[i]--;
-  transporter.ressources[i]++;
 }
 
 function sell(i) {
+  player.money += sellPrices.value[i];
   ressources.value[i]++;  
-  transporter.ressources[i]--;
+  transporter.unload(i, 1);
+}
+
+function price(i, off) {
+  const basePrice = 50 + 20 * Math.pow(Math.floor(i/3),1.6);
+  const need = Math.min(Math.max( Math.pow((economy.value[i]+1)/(ressources.value[i]+off+1), 0.6), 0.5), 3);
+  return basePrice * need;
 }
 
 /* ---------------- watchers ---------------- */

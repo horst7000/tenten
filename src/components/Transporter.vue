@@ -1,10 +1,13 @@
 <template>
   <!-- fix chrome mobile bug when hiding top toolbar
-   https://www.stevefenton.co.uk/blog/2022/12/mobile-position-sticky-issue/ -->
-  <div style="position: fixed;"></div> 
-
-  <div class="transporter">
-    <br style="height: 5rem;"/>
+    https://www.stevefenton.co.uk/blog/2022/12/mobile-position-sticky-issue/ -->
+    <div style="position: fixed;"></div> 
+    
+    <div class="transporter">
+    <div class="flex center">
+      <h3 style="flex-grow: 0;">$ {{ player.money }}</h3>
+    </div>
+      <!-- <br style="height: 5rem;"/> -->
     <div class="flex" style="flex-wrap: nowrap;">
       <div style="flex-grow: 0;">
         <label class="stack">
@@ -18,14 +21,14 @@
       </div>
 
       <div class="flex">
-        <span v-for="r in ressourcesAvail" class="res-avail">
-          <span class="label" :style="{background: `hsl(${15*(r[1]+1)}, 60%, 50%)`}"></span>{{ r[0] }}
+        <span class="res-avail">$Ø:</span>
+        <span v-for="r in transporter.ressources" class="res-avail">
+          <span class="label" :style="{background: `hsl(${15*r.index}, 60%, 50%)`}"></span>{{ r.price }}
           <!-- TODO show price instead of stock -->
         </span>
       </div>
 
     </div>
-
     <div class="flex center">
       <button class="move-btn" :disabled="transporter.isInCity" @click="() => transporter.inCity = cities.selected">
         {{ transporter.isInCity ? "Is here" : "Move here ..." }}
@@ -37,24 +40,18 @@
 <script setup>
 /* ---------------- props ------------------- */
 
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useCityStore } from '../stores/cities';
 import { useTransporterStore } from '../stores/transporter';
+import { usePlayerStore } from '../stores/player';
 
 /* ---------------- data -------------------- */
 const transporter = useTransporterStore();
 const cities      = useCityStore();
+const player      = usePlayerStore();
 
 /* ---------------- refs -------------------- */
 /* ---------------- computed ---------------- */
-const ressourcesAvail = computed(() => {
-  const res = [];
-  transporter.ressources.forEach((r,i) => {
-    if(r > 0) res.push([r,i]);
-  })
-  return res;
-})
-
 /* ---------------- functions --------------- */
 /* ---------------- watchers ---------------- */
 </script>
