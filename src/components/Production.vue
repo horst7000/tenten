@@ -33,6 +33,7 @@ import ProdFacility from './ProdFacility.vue';
 import interact from 'interactjs'
 
 /* ---------------- props ------------------- */
+const props = defineProps({cid: String,})
 /* ---------------- data -------------------- */
 const prodId = "pr-" + Math.random().toString(36).slice(5);
 const lineLength = 10;

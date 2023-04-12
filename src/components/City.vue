@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 0 var(--main-padding); border: 2px solid var(--color-background-soft); border-top: none; border-bottom: none;" >
-    <Trading></Trading>
-    <Production></Production>
+    <Trading :cid="props.cid"></Trading>
+    <Production :cid="props.cid"></Production>
   </div>
 </template>
 
@@ -9,6 +9,7 @@
 import Production from './Production.vue';
 import Trading from './Trading.vue';
 /* ---------------- props ------------------- */
+const props = defineProps({cid: String,})
 /* ---------------- data -------------------- */
 /* ---------------- refs -------------------- */
 /* ---------------- computed ---------------- */
