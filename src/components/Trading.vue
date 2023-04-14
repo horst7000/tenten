@@ -2,7 +2,7 @@
   <h1>Trading</h1>
   <div class="flex eight" v-for="i in ressources.length" >
     <span class="name half">Ressource {{ i }}
-      <span class="label" :style="{ backgroundColor: `hsl(${15*i}, 60%, 50%)`, margin: '0 1em 0 0.5em'}"></span>
+      <span class="label" :style="{ backgroundColor: `hsl(${15*(i-1)}, 60%, 50%)`, margin: '0 1em 0 0.5em'}"></span>
     </span>
 
     <span :style="{ color: transporter.isInCity ? 'var(--color-text)' : '#777' }">
@@ -11,7 +11,7 @@
     <button :disabled="!isBuyable(i-1)" class="left" @click="() => buy(i-1)">
       {{ buyPrices[i-1] }}
     </button>
-    <button :disabled="!isSellable(i-1)" class="right" @click="() => sell(i-1)">
+    <button :disabled="!isSellable(i-1)" class="right" :class="{ 'hint': transporter.ressources[i-1] }" @click="() => sell(i-1)">
       {{ sellPrices[i-1] }}
     </button>
     <span :style="{ color: `hsl(0, ${(economy[i-1]+1)/(ressources[i-1]+1) > 1.5 ? 100 : 0 }%, 70%)` }">
@@ -47,11 +47,11 @@ const sellPrices = computed(() => {
 
 /* ---------------- functions --------------- */
 function isBuyable(i) {
-  return ressources.value[i] > 0 && transporter.isInCity;
+  return ressources.value[i] > 0 && transporter.isInCity &&  player.money >= buyPrices.value[i];
 }
 
 function isSellable(i) {
-  return transporter.ressources[i] && transporter.ressources[i].count > 0 && transporter.isInCity;
+  return transporter.ressources[i] && transporter.isInCity;
 }
 
 function buy(i) {
@@ -106,5 +106,8 @@ button {
 button:disabled {
   background-color: var(--color-background-soft);
   color: #777;
+}
+.hint:disabled {
+  color: #aaa;
 }
 </style>

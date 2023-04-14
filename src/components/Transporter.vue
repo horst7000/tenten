@@ -30,8 +30,8 @@
 
     </div>
     <div class="flex center">
-      <button class="move-btn" :disabled="transporter.isInCity" @click="() => transporter.inCity = cities.selected">
-        {{ transporter.isInCity ? "Is here" : "Move here ..." }}
+      <button class="move-btn" :disabled="transporter.isInCity" @click="moveToSelected">
+        {{ transporter.isInCity ? "Is here" : "Move here ... ($ -100)" }}
       </button>
     </div>
   </div>
@@ -53,6 +53,10 @@ const player      = usePlayerStore();
 /* ---------------- refs -------------------- */
 /* ---------------- computed ---------------- */
 /* ---------------- functions --------------- */
+function moveToSelected() {
+  transporter.inCity = cities.selected;
+  player.money -= 100;
+}
 /* ---------------- watchers ---------------- */
 </script>
 
