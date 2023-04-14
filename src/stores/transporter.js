@@ -11,7 +11,7 @@ export const useTransporterStore = defineStore('transporter', () => {
   const inCity     = ref('')
 
   /* ---------------- computed ---------------- */
-  const isInCity = computed(() => cities.selected == inCity.value);
+  const isInSelectedCity = computed(() => cities.selected == inCity.value);
 
   /* ---------------- functions --------------- */
   function rand(max) {
@@ -35,5 +35,5 @@ export const useTransporterStore = defineStore('transporter', () => {
     if(ressources.value[index].count == 0) delete ressources.value[index];
   }
   
-  return { ressources, inCity, isInCity, load, unload }
+  return { ressources, inCity, isInSelectedCity, load, unload }
 })

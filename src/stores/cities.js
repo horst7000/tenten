@@ -24,7 +24,7 @@ export const useCityStore = defineStore('cities', () => {
   function addCity() {
     const id = 'c-'+Math.random().toString(36).slice(2);
     all.value[id] = {
-      ressources: Array(ressourcesCnt).fill(0).map(() => rand(10)),
+      ressources: Array(ressourcesCnt).fill(0).map((r,i) => rand(10*(1-i/ressourcesCnt))),
       production: Array(100),
       economy: Array(ressourcesCnt).fill(5),
       population: 1,

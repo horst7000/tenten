@@ -1,11 +1,11 @@
 <template>
   <h1>Trading</h1>
-  <div class="flex eight" v-for="i in ressources.length" >
-    <span class="name half">Ressource {{ i }}
+  <div class="flex eight" v-for="i in ressources.length" :key="i" :class="{ 'space': (i) % 3 == 0 }">
+    <span class="name half">{{ resourceNames[i-1] }}
       <span class="label" :style="{ backgroundColor: `hsl(${15*(i-1)}, 60%, 50%)`, margin: '0 1em 0 0.5em'}"></span>
     </span>
 
-    <span :style="{ color: transporter.isInCity ? 'var(--color-text)' : '#777' }">
+    <span :style="{ color: transporterIsHere ? 'var(--color-text)' : '#777' }">
       {{ transporter.ressources[i-1] ? transporter.ressources[i-1].count : '' }}
     </span>
     <button :disabled="!isBuyable(i-1)" class="left" @click="() => buy(i-1)">
@@ -33,6 +33,32 @@ const props = defineProps({cid: String,})
 const cities      = useCityStore();
 const transporter = useTransporterStore();
 const player      = usePlayerStore();
+const resourceNames = [
+    "Lunite",
+    "Neogold",
+    "Planox",
+    "Chroniton",
+    "Tetryon",
+    "Dilithium",
+    "Quantumite",
+    "Moondust",
+    "Cosmium",
+    "Hyperfuel",
+    "Tritanium",
+    "Voidstone",
+    "Neutronium",
+    "Exotic Gases",
+    "Phase Shifters",
+    "Neural Cores",
+    "Antimatter",
+    "Bicubic Chips",
+    "Plasma Residue",
+    "Neutrino Beams",
+    "Fusion Cores",
+    "Dark Matter",
+    "Singularites",
+]
+
 
 /* ---------------- refs -------------------- */
 /* ---------------- computed ---------------- */
@@ -44,14 +70,17 @@ const buyPrices  = computed(() => {
 const sellPrices = computed(() => {  
   return ressources.value.map( (r, i) => Math.round(price(i, 1) * 0.9));
 });
+const transporterIsHere = computed(() => {
+  return transporter.inCity == props.cid
+})
 
 /* ---------------- functions --------------- */
 function isBuyable(i) {
-  return ressources.value[i] > 0 && transporter.isInCity &&  player.money >= buyPrices.value[i];
+  return ressources.value[i] > 0 && transporterIsHere.value &&  player.money >= buyPrices.value[i];
 }
 
 function isSellable(i) {
-  return transporter.ressources[i] && transporter.isInCity;
+  return transporter.ressources[i] && transporterIsHere.value;
 }
 
 function buy(i) {
@@ -68,7 +97,7 @@ function sell(i) {
 
 function price(i, off) {
   const basePrice = 50 + 20 * Math.pow(Math.floor(i/3),1.6);
-  const need = Math.min(Math.max( Math.pow((economy.value[i]+1)/(ressources.value[i]+off+1), 0.6), 0.5), 3);
+  const need = Math.min(Math.max( Math.pow((economy.value[i]+1)/(ressources.value[i]+off+1), 0.6), 0.5), 2.5);
   return basePrice * need;
 }
 
@@ -82,6 +111,9 @@ function price(i, off) {
 }
 .name {
   text-align: right;
+}
+.space{
+  margin-bottom: 0.4em;
 }
 .left {
   border-radius: 0.2em;
@@ -106,6 +138,7 @@ button {
 button:disabled {
   background-color: var(--color-background-soft);
   color: #777;
+  pointer-events: none;
 }
 .hint:disabled {
   color: #aaa;

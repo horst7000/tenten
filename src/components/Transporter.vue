@@ -30,8 +30,8 @@
 
     </div>
     <div class="flex center">
-      <button class="move-btn" :disabled="transporter.isInCity" @click="moveToSelected">
-        {{ transporter.isInCity ? "Is here" : "Move here ... ($ -100)" }}
+      <button class="move-btn" :disabled="transporter.isInSelectedCity" @click="moveToSelected">
+        {{ transporter.isInSelectedCity ? "Is here" : "Move here ... ($ -100)" }}
       </button>
     </div>
   </div>
