@@ -40,13 +40,20 @@
   const transporter = useTransporterStore();
 
   /* ---------------- refs -------------------- */
-  const checkedTab      = ref(0);
   const tabTransitions  = ref(Array(3).fill(defaultTransition));
   const tabIndex        = ref({left: 0, mid: 1, right: 2});
   const tabTranslatesX  = ref([-100, -100, -100]);
   const tabWidth        = ref(0);
   
   /* ---------------- computed ---------------- */
+  const checkedTab     = computed({
+    get: () => {
+      return cities.checked;
+    },
+    set: (newVal) => {
+      cities.checked = newVal;
+    },
+  })
   const checkedTabLeft = computed(() => {
     return (checkedTab.value + tabsCnt - 1) % tabsCnt;
   })
@@ -71,7 +78,6 @@
     tabTranslatesX.value[1] += dx;
     tabTranslatesX.value[2] += dx;
   }
-
 
   /* ---------------- watchers ---------------- */
   watch(checkedTab, (newTab, oldTab) => {

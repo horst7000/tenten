@@ -8,6 +8,7 @@ export const useCityStore = defineStore('cities', () => {
   /* ---------------- refs -------------------- */
   const all      = ref({});
   const selected = ref('');
+  const checked  = ref(0);
 
   /* ---------------- computed ---------------- */
   /* ---------------- functions --------------- */
@@ -24,11 +25,12 @@ export const useCityStore = defineStore('cities', () => {
   function addCity() {
     const id = 'c-'+Math.random().toString(36).slice(2);
     all.value[id] = {
+      id: id,
       ressources: Array(ressourcesCnt).fill(0).map((r,i) => rand(10*(1-i/ressourcesCnt))),
       production: Array(100),
       economy: Array(ressourcesCnt).fill(5),
       population: 1,
-      position: { x: 0, y: 0 },
+      position: { x: 90*Math.random(), y: 90*Math.random() },
       warehouse: {
         ressources: Array(ressourcesCnt).fill(0),
         limit: 0,
@@ -37,5 +39,5 @@ export const useCityStore = defineStore('cities', () => {
     };
   }
 
-  return { initCities, all, ressourcesCnt, selected }
+  return { initCities, all, ressourcesCnt, selected, checked }
 })
