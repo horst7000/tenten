@@ -62,6 +62,7 @@ function moveToSelected() {
 
 <style scoped>
 .transporter {
+  z-index: 2;
   position: sticky;
   bottom: 0;
   margin: 0 var(--main-margin);

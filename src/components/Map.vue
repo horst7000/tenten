@@ -49,10 +49,10 @@ const transporter = useTransporterStore();
 }
 .transporter {
   border-color: var(--color-background-mute);
-  z-index: 999;
+  z-index: 1;
 }
 .selected {
   border-color: var(--color-heading);
-  z-index: 999;
+  z-index: 1;
 }
 </style>
