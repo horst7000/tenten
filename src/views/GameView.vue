@@ -33,7 +33,7 @@
 
   /* ---------------- props ------------------- */
   /* ---------------- data -------------------- */
-  const tabsCnt           = 17;
+  const tabsCnt           = 5;
   const swipeThreshold    = 25; // in %
   const defaultTransition = 'all 0.3s'; // in %
   const cities      = useCityStore();

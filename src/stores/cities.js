@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useCityStore = defineStore('cities', () => {
   /* ---------------- data -------------------- */
-  const ressourcesCnt = 23;
+  const resourcesCnt = 23;
 
   /* ---------------- refs -------------------- */
   const all      = ref({});
@@ -26,18 +26,18 @@ export const useCityStore = defineStore('cities', () => {
     const id = 'c-'+Math.random().toString(36).slice(2);
     all.value[id] = {
       id: id,
-      ressources: Array(ressourcesCnt).fill(0).map((r,i) => rand(10*(1-i/ressourcesCnt))),
+      resources: Array(resourcesCnt).fill(0).map((r,i) => rand(10*(1-i/resourcesCnt))),
       production: Array(100),
-      economy: Array(ressourcesCnt).fill(5),
+      economy: Array(resourcesCnt).fill(5),
       population: 1,
       position: { x: 90*Math.random(), y: 90*Math.random() },
       warehouse: {
-        ressources: Array(ressourcesCnt).fill(0),
+        resources: Array(resourcesCnt).fill(0),
         limit: 0,
         orders: [],
       }
     };
   }
 
-  return { initCities, all, ressourcesCnt, selected, checked }
+  return { initCities, all, resourcesCnt, selected, checked }
 })

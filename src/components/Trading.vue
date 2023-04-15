@@ -1,21 +1,21 @@
 <template>
-  <h1>Trading</h1>
-  <div class="flex eight" v-for="i in ressources.length" :key="i" :class="{ 'space': (i) % 3 == 0 }">
+  <h1>Trading ◯</h1>
+  <div class="flex eight resource" v-for="i in resources.length" :key="i" :class="{ 'space': (i) % 3 == 0 }">
     <span class="name half">{{ resourceNames[i-1] }}
       <span class="label" :style="{ backgroundColor: `hsl(${15*(i-1)}, 60%, 50%)`, margin: '0 1em 0 0.5em'}"></span>
     </span>
 
     <span :style="{ color: transporterIsHere ? 'var(--color-text)' : '#777' }">
-      {{ transporter.ressources[i-1] ? transporter.ressources[i-1].count : '' }}
+      {{ transporter.resources[i-1] ? transporter.resources[i-1].count : '' }}
     </span>
     <button :disabled="!isBuyable(i-1)" class="left" @click="() => buy(i-1)">
       {{ buyPrices[i-1] }}
     </button>
-    <button :disabled="!isSellable(i-1)" class="right" :class="{ 'hint': transporter.ressources[i-1] }" @click="() => sell(i-1)">
+    <button :disabled="!isSellable(i-1)" class="right" :class="{ 'hint': transporter.resources[i-1] }" @click="() => sell(i-1)">
       {{ sellPrices[i-1] }}
     </button>
-    <span :style="{ color: `hsl(0, ${(economy[i-1]+1)/(ressources[i-1]+1) > 1.5 ? 100 : 0 }%, 70%)` }">
-      {{ ressources[i-1] }}
+    <span :style="{ color: `hsl(0, ${(economy[i-1]+1)/(resources[i-1]+1) > 1.5 ? 100 : 0 }%, 70%)` }">
+      {{ resources[i-1] }}
     </span>
   </div>
 </template>
@@ -62,13 +62,13 @@ const resourceNames = [
 
 /* ---------------- refs -------------------- */
 /* ---------------- computed ---------------- */
-const ressources = computed(() => cities.all[props.cid].ressources);
+const resources = computed(() => cities.all[props.cid].resources);
 const economy    = computed(() => cities.all[props.cid].economy);
 const buyPrices  = computed(() => {
-  return ressources.value.map( (r, i) => Math.round(price(i, 0)));
+  return resources.value.map( (r, i) => Math.round(price(i, 0)));
 });
 const sellPrices = computed(() => {  
-  return ressources.value.map( (r, i) => Math.round(price(i, 1) * 0.9));
+  return resources.value.map( (r, i) => Math.round(price(i, 1) * 0.9));
 });
 const transporterIsHere = computed(() => {
   return transporter.inCity == props.cid
@@ -76,28 +76,28 @@ const transporterIsHere = computed(() => {
 
 /* ---------------- functions --------------- */
 function isBuyable(i) {
-  return ressources.value[i] > 0 && transporterIsHere.value &&  player.money >= buyPrices.value[i];
+  return resources.value[i] > 0 && transporterIsHere.value &&  player.money >= buyPrices.value[i];
 }
 
 function isSellable(i) {
-  return transporter.ressources[i] && transporterIsHere.value;
+  return transporter.resources[i] && transporterIsHere.value;
 }
 
 function buy(i) {
   player.money -= buyPrices.value[i];
   transporter.load(i, 1, buyPrices.value[i]);
-  ressources.value[i]--;
+  resources.value[i]--;
 }
 
 function sell(i) {
   player.money += sellPrices.value[i];
-  ressources.value[i]++;  
+  resources.value[i]++;  
   transporter.unload(i, 1);
 }
 
 function price(i, off) {
   const basePrice = 50 + 20 * Math.pow(Math.floor(i/3),1.6);
-  const need = Math.min(Math.max( Math.pow((economy.value[i]+1)/(ressources.value[i]+off+1), 0.6), 0.5), 2.5);
+  const need = Math.min(Math.max( Math.pow((economy.value[i]+1)/(resources.value[i]+off+1), 0.6), 0.5), 2.5);
   return basePrice * need;
 }
 
@@ -142,5 +142,10 @@ button:disabled {
 }
 .hint:disabled {
   color: #aaa;
+}
+.resource:hover {
+  background-color: #ffffff11;
+  transition: background-color 0.4s;
+  border-radius: 0.2em;
 }
 </style>

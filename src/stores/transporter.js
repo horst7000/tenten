@@ -7,7 +7,7 @@ export const useTransporterStore = defineStore('transporter', () => {
   const cities = useCityStore();
 
   /* ---------------- refs -------------------- */
-  const ressources = ref({});
+  const resources = ref({});
   const inCity     = ref('')
 
   /* ---------------- computed ---------------- */
@@ -19,21 +19,21 @@ export const useTransporterStore = defineStore('transporter', () => {
   }
 
   function load(index, count, price) {
-    if(ressources.value[index]) {
-      const oldCnt = ressources.value[index].count;
+    if(resources.value[index]) {
+      const oldCnt = resources.value[index].count;
       const newCnt = oldCnt + count;
-      ressources.value[index].price = ( oldCnt * ressources.value[index].price + count * price ) / newCnt;
-      ressources.value[index].count += count;
+      resources.value[index].price = ( oldCnt * resources.value[index].price + count * price ) / newCnt;
+      resources.value[index].count += count;
     }
     else {
-      ressources.value[index] = { count, price, index }
+      resources.value[index] = { count, price, index }
     }
   }
 
   function unload(index, count) {
-    ressources.value[index].count -= count;
-    if(ressources.value[index].count == 0) delete ressources.value[index];
+    resources.value[index].count -= count;
+    if(resources.value[index].count == 0) delete resources.value[index];
   }
   
-  return { ressources, inCity, isInSelectedCity, load, unload }
+  return { resources, inCity, isInSelectedCity, load, unload }
 })
