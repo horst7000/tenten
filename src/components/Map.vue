@@ -6,7 +6,9 @@
       :class="{ 'selected': c.id == cities.selected, 'transporter': c.id == transporter.inCity}"
       :style="{ left: c.position.x+'%', top: c.position.y+'%' }"
       @click="() => cities.checked = i"
-      v-for="c,i in Object.values(cities.all)"></div>
+      v-for="c,i in Object.values(cities.all)">
+      <p class="name">{{ i+1 }}</p>
+    </div>
   </div>
 </template>
 
@@ -40,6 +42,10 @@ const transporter = useTransporterStore();
   position: absolute;
   cursor: pointer;
   transition: all 0.3s;
+}
+.name{
+  text-align: center;
+  color: rgba(235, 235, 235, 0.81);
 }
 .transporter {
   border-color: var(--color-background-mute);
