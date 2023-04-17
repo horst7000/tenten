@@ -10,7 +10,7 @@
       <div style="margin-top: 2rem;" class="flex nine">
         <template v-for="cid,i in Object.keys(cities.all)">
           <input v-model="checkedTab" :value="i" :id="'tab-city-'+i" type='radio' name='citytabs' style="display: none;">
-          <label class="pseudo button toggle" :class="{ 'here': cid==transporter.inCity }" :for="'tab-city-'+i">{{ i+1 }}</label>
+          <label class="pseudo button toggle tab" :class="{ 'here': cid==transporter.inCity }" :for="'tab-city-'+i">{{ i+1 }}</label>
         </template>
       </div>
       <div class="tabs" style="margin: 0 var(--main-margin);">
@@ -33,7 +33,7 @@
 
   /* ---------------- props ------------------- */
   /* ---------------- data -------------------- */
-  const tabsCnt           = 5;
+  const tabsCnt           = 18;
   const swipeThreshold    = 25; // in %
   const defaultTransition = 'all 0.3s'; // in %
   const cities      = useCityStore();
@@ -165,14 +165,16 @@
     padding: 0 var(--main-padding);
   }
 
-  .here, .here:hover {
-    border: 2px solid var(--color-background-mute);
-    transition: none;
-    margin: calc(0.3em - 2px) 0px;
+  .tab, .tab:hover {
+    border: 2px solid transparent;
   }
 
-  /* :checked+.toggle, :checked+.toggle:hover {
-    box-shadow: initial;
-  } */
+  :checked+.tab, :checked+.tab.here, :checked+.tab.here:hover {
+    border-color: var(--color-heading);
+  }
+
+  .tab.here {
+    border-color: var(--color-background-mute);
+  }
   
   </style>

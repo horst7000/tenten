@@ -50,6 +50,7 @@ const transporter = useTransporterStore();
 .transporter {
   border-color: var(--color-background-mute);
   z-index: 1;
+  box-shadow: 0 0 3px black, inset 0 0 3px black;
 }
 .selected {
   border-color: var(--color-heading);

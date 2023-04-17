@@ -28,3 +28,17 @@ h1, h2 {
 .pseudo:hover {
   box-shadow: inset 0 0 0 99em rgba(255, 255, 255, 0.05) !important;
 }
+
+.dropimage, button, .button, [type="submit"] {
+  border-radius: 0.6em;
+}
+
+.stack:first-child, .stack:first-child .toggle {
+  border-top-left-radius: 0.6em;
+  border-top-right-radius: 0.6em;
+}
+
+.stack:last-child, .stack:last-child .toggle {
+  border-bottom-left-radius: 0.6em;
+  border-bottom-right-radius: 0.6em;
+}

@@ -5,7 +5,7 @@
     
     <div class="transporter">
     <div class="flex center">
-      <h3 style="flex-grow: 0;">$ {{ player.money }}</h3>
+      <h2 style="flex-grow: 0; font-weight: bold; color: white;">$ {{ player.money }}</h2>
     </div>
       <!-- <br style="height: 5rem;"/> -->
     <div class="flex" style="flex-wrap: nowrap;">
