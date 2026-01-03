@@ -41,7 +41,7 @@ const resourceNames = [
     "Tetryon",
     "Dilithium",
     "Quantumite",
-    "Moondust",
+    "Moonconcrete",
     "Cosmium",
     "Hyperfuel",
     "Tritanium",

@@ -7,7 +7,7 @@
       :style="{ left: c.position.x+'%', top: c.position.y+'%' }"
       @click="() => cities.checked = i"
       v-for="c,i in Object.values(cities.all)">
-      <p class="name">{{ i+1 }}</p>
+      <p class="name">A{{ i+1 }}B1</p>
     </div>
   </div>
 </template>
@@ -42,6 +42,7 @@ const transporter = useTransporterStore();
   position: absolute;
   cursor: pointer;
   transition: all 0.3s;
+  font-size: 0.8em;
 }
 .name{
   text-align: center;

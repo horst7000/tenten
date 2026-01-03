@@ -7,10 +7,10 @@
 
       <Map></Map>
       
-      <div style="margin-top: 2rem;" class="flex nine">
+      <div style="margin-top: 2rem;" class="flex six">
         <template v-for="cid,i in Object.keys(cities.all)">
           <input v-model="checkedTab" :value="i" :id="'tab-city-'+i" type='radio' name='citytabs' style="display: none;">
-          <label class="pseudo button toggle tab" :class="{ 'here': cid==transporter.inCity }" :for="'tab-city-'+i">{{ i+1 }}</label>
+          <label class="pseudo button toggle tab" :class="{ 'here': cid==transporter.inCity }" :for="'tab-city-'+i">A{{ i+1 }}B1</label>
         </template>
       </div>
       <div class="tabs" style="margin: 0 var(--main-margin);">
@@ -167,6 +167,8 @@
 
   .tab, .tab:hover {
     border: 2px solid transparent;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   :checked+.tab, :checked+.tab.here, :checked+.tab.here:hover {
